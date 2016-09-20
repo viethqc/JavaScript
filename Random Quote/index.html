@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://github.com/FortAwesome/Font-Awesome/tree/master/css/font-awesome.min.css" />
+	<script src="https://use.fontawesome.com/97ef8f9f0e.js"></script>
+	<style type="text/css">
+		body
+		{
+			background-color: #342224;
+			font-family: 'Raleway', sans-serif;
+			color: black;
+		}
+
+		.content
+		{
+			background-color: white;
+			margin-top: 200px;
+			min-height: 250px;
+			border-radius: 5px;	
+		}
+
+		#author
+		{
+		}
+
+		#quote
+		{
+			margin-top: 30px;
+		}
+
+		#list-button
+		{
+			padding: 10px 0px;
+		}
+
+		#quote
+		{
+			font-size: 1.75em;
+			font-weight: 500;
+		}
+
+		#author
+		{
+			padding: 20px 0px;
+			font-size: 1em;
+		}
+
+		.writer
+		{
+			color: white;
+			display: block;
+			margin: 10px;
+		}
+
+		button
+		{
+			height: 50px;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			var iOldColor = 0;
+			var iOldQuote = 0;
+
+			var arrColor = ["#9b59b6", "#f39c12", "#342224", "#16a085", "#e74c3c", "#bdbb99", "#472e32", "#fb6964", "#73a857"];
+			var arrObjQuote = [
+				{
+					"quote" : "To live is the rarest thing in the world. Most people exist, that is all",
+					"author" : "Oscar Wilde"
+				},
+				{
+					"quote" : "There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle",
+					"author" : "Albert Einstein"
+				},
+				{
+					"quote" : "Life is what happens to you while you're busy making other plans",
+					"author" : "John Lennon"
+				},
+				{
+					"quote" : "Life isn't about finding yourself. Life is about creating yourself",
+					"author" : "George Bernard Shaw"
+				},
+				{
+					"quote" : "Do not follow where the path may lead, go instead where there is no path and leave a trail",
+					"author" : "Ralph Waldo Emerson"
+				},
+				{
+					"quote" : "The mystery of life is not a problem to be solved but a reality to be experienced",
+					"author" : "Soren Kierkegaard"
+				},
+				{
+					"quote" : "Very little is needed to make a happy life; it is all within yourself, in your way of thinking",
+					"author" : "Marcus Aurelius"
+				}
+			];
+
+			$("#newquote").on("click", function(){
+				var iColor = 0;
+				var iQuote = 0;
+
+				do
+				{
+					iColor = Math.floor((Math.random() * arrColor.length));
+					iQuote = Math.floor((Math.random() * arrObjQuote.length));
+				}
+				while (iColor == iOldColor && iQuote != iOldQuote);
+				iOldQuote = iQuote;
+				iOldColor = iColor;
+
+				$("body").css("background-color", arrColor[iColor]);
+				$("body").css("color", arrColor[iColor]);
+				$(".btn").css("background-color", arrColor[iColor]);
+				$(".btn").css("color", "white");
+
+				$("#quote span").text(arrObjQuote[iQuote]["quote"]);
+				$("#author span").text(arrObjQuote[iQuote]["author"]);
+			});
+
+			$("#tweet").on("click", function(){
+				var str = "https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text='" + encodeURIComponent('"' + arrObjQuote[iOldQuote]["quote"] + '" ' + arrObjQuote[iOldQuote]["author"]);
+				window.open(str);
+			});
+		});
+	</script>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-6 col-xs-offset-3 content">
+				<div class="row" >
+					<div class="col-xs-12" id = "inner-content">
+						<div class="row">
+							<div class = "col-xs-10 col-xs-offset-1" id = "quote">
+								<i class = "fa fa-quote-left"></i>
+								<span>To live is the rarest thing in the world. Most people exist, that is all		</span>
+							</div>
+
+							<div class="col-xs-10 col-xs-offset-1 text-right"  id = "author">
+								- <span>Oscar Wilde</span>
+							</div>
+
+							<div class="col-xs-10 col-xs-offset-1" id = "list-button">
+								<div class="row">
+									<div class="col-xs-6">
+										<button class="btn pull-left" id = "tweet"><i class="fa fa-twitter fa-2x"></i></button>
+									</div>
+									<div class="col-xs-6">
+										<button class="btn right btn-lg pull-right" id = "newquote">New quote</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>  
+
+		<span class = "text-center writer"> Written by VietHQc</span>
+	</div> 
+
+</body>
+</html>
