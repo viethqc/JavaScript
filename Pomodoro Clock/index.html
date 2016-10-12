@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" ></script>
+
+	<script src="bootstrap-3.3.7-dist/js/jquery-3.1.1.min.js"></script>
+
+	<!-- <link rel="stylesheet" href="https://github.com/FortAwesome/Font-Awesome/tree/master/css/font-awesome.min.css" /> -->
+
+	<script type="text/javascript">
+		
+	</script>
+	<!-- <script src="https://use.fontawesome.com/97ef8f9f0e.js"></script> -->
+	<style type="text/css">
+
+		body
+		{
+			background-color: #092b40;
+			color :white;
+		}
+
+		.container
+		{
+			min-width: 700px !important; 
+		}
+
+		.time
+		{
+			height: 130px;
+		}
+
+		.time-edit
+		{
+			height: 80px;
+			margin-top: 50px;
+			text-transform: uppercase;
+			font-weight: bold;
+			color: #ffffff;
+		}
+		.clock
+		{
+			padding: 30px 0px;
+			margin: 0 auto;
+		}
+
+		.circle
+		{
+			border : 2px solid #86af0a;
+			width: 300px;
+			height: 300px;
+			display: block;
+			margin: 0 auto;
+			border-radius: 50%;
+			font-size: 60px;
+			font-weight: bold;
+			text-align: center;
+		}
+
+		.control
+		{
+			height: 80px;
+		}
+
+		.break-time
+		{
+			font-size: 40px;
+		}
+
+		.plus, .minus
+		{
+			font-size: 30px;
+			padding-top: 5px;
+		}
+
+		.plus-minus-button
+		{
+			background-color: #092b40;
+			color: white;
+			cursor: pointer;
+			border: none;
+		}
+
+		.status
+		{
+			font-size: 20px;
+			display: block;
+		    margin-top: 20px;
+   			margin-bottom: 50px;	
+   			text-transform: uppercase;
+		}
+
+		.start-stop
+		{
+			width: 100%;
+			border: none;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			var hInterval;
+			var iCurrentState = 1;		// = 1: sesstion time
+										// = 0: break time
+
+
+		    $("#break-minus").on("click", function(){
+		    	var strBreakTime = $("#break-time-text").text();
+		    	var iBreakTime;
+		    	
+		    	iBreakTime = parseInt(strBreakTime);
+		    	if (iBreakTime >= 2)
+		    	{
+		    		iBreakTime--;
+		    	}
+
+		    	$("#break-time-text").text(iBreakTime);
+		    });
+
+		    $("#break-plus").on("click", function(){
+		    	var strBreakTime = $("#break-time-text").text();
+		    	var iBreakTime;
+		    	
+		    	iBreakTime = parseInt(strBreakTime);
+		    	iBreakTime++;
+
+		    	$("#break-time-text").text(iBreakTime);
+		    });
+
+		    $("#session-minus").on("click", function(){
+		    	var strSessionTime = $("#session-time-text").text();
+		    	var iSessionTime;
+		    	var strTextCircle;
+		    	
+		    	iSessionTime = parseInt(strSessionTime);
+		    	if (iSessionTime >= 2)
+		    	{
+		    		iSessionTime--;
+		    	}
+
+		    	$("#session-time-text").text(iSessionTime);
+
+		    	strTextCircle = "";
+		    	strTextCircle += iSessionTime;
+		    	$(".time-show").text(timeHours(iSessionTime, 0));
+		    });
+
+		    $("#session-plus").on("click", function(){
+		    	var strSessionTime = $("#session-time-text").text();
+		    	var iSessionTime;
+		    	var strTextCircle;
+		    	
+		    	iSessionTime = parseInt(strSessionTime);
+		    	iSessionTime++;
+
+		    	$("#session-time-text").text(iSessionTime);
+
+		    	strTextCircle = "";
+		    	strTextCircle += iSessionTime;
+		    	$(".time-show").text(timeHours(iSessionTime, 0));
+		    });
+
+		    $("#start").on("click", function()
+		    {
+		    	$(".plus-minus-button").attr("disabled", true);
+		    	hInterval = setInterval(function(){
+		    		var strTime = "";
+		    		var iMinute;
+
+		    		strTime = $(".time-show").text();
+		    		strTime = minusTime(strTime);
+		    		$(".time-show").text(strTime);
+		    		if (strTime === "00:00")
+		    		{
+		    			if (iCurrentState === 1)
+		    			{
+		    				iCurrentState = 0;
+		    			}
+		    			else if (iCurrentState === 0)
+		    			{
+		    				iCurrentState = 1;
+		    			}
+
+		    			if (iCurrentState === 0)
+			    		{
+			    			iMinute = parseInt($("#break-time-text").text());
+			    			$(".status").text("break");
+			    		}
+			    		else if (iCurrentState === 1)
+			    		{
+			    			iMinute = parseInt($("#session-time-text").text());
+			    			$(".status").text("session");
+			    		}
+			    		$(".time-show").text(timeHours(iMinute, 0));
+		    		}
+
+		    	}, 1000);
+		    	$("#start").attr("disabled", "true");
+		    }
+		    );
+
+		    $("#reset").on("click", function()
+		    {
+		    	clearInterval(hInterval);
+		    	$(".plus-minus-button").removeAttr("disabled");
+		    	$("#break-time-text").text(5);
+		    	$("#session-time-text").text(25);
+		    	$(".time-show").text("25:00");
+		    	$("#start").removeAttr("disabled");
+		    	$(".status").text("session");
+		    });
+
+		    function timeHours(minute, second)
+		   	{
+		   		var strTmp = "";
+		   		var strResult = "";
+
+		   		if (isNaN(minute) === true)
+		   		{
+		   			return null;
+		   		}
+
+		   		if (isNaN(second) === true)
+		   		{
+		   			return null;
+		   		}
+
+		   		if (minute < 0)
+		   		{
+		   			return null;
+		   		}
+
+		   		strTmp = "";
+		   		strTmp += minute;
+		   		if (strTmp.length == 1)
+		   		{
+		   			strResult += "0";
+		   		}
+		   		strResult += minute;
+
+		   		strResult += ":";
+		   		strTmp = "";
+		   		strTmp += second;
+		   		if (strTmp.length == 1)
+		   		{
+		   			strResult += "0";
+		   		}
+		   		strResult += second;
+
+		   		return strResult;
+		   	}
+
+		   	function minusTime(strTime)
+		   	{
+		   		var arr = [];
+		   		var iMinute;
+		   		var iSecond;
+		   		var strResult = "";
+
+		   		arr = strTime.split(":");
+		   		iMinute = parseInt(arr[0]);
+		   		iSecond = parseInt(arr[1]);
+
+		   		if (iSecond == 0)
+		   		{
+		   			iSecond = 59;
+		   			if (iMinute > 0)
+		   			{
+		   				iMinute--;
+		   			}
+		   		}
+		   		else
+		   		{
+		   			if (iSecond > 0)
+		   			{
+		   				iSecond--;
+		   			}
+		   		}
+
+		   		return timeHours(iMinute, iSecond);
+		   	}
+		});
+	</script>
+</head>
+<body>
+
+<div class="container">
+		<div class="col-xs-12 time">
+			<div class="col-xs-3 col-xs-offset-3 time-edit text-center">
+				break time
+				<div class="row">
+					<div class="col-xs-4 minus text-right"><button class="plus-minus-button" id = "break-minus">-</button></div>
+					<div class="col-xs-4 break-time" id = "break-time-text">5</div>
+					<div class="col-xs-4 plus text-left"><button class="plus-minus-button" id = "break-plus">+</button></div>
+				</div>
+			</div>
+			<div class="col-xs-3 time-edit text-center">
+				session time
+				<div class="row">
+					<div class="col-xs-4 minus text-right"><button class="plus-minus-button"  id = "session-minus">-</button></div>
+					<div class="col-xs-4 break-time" id = "session-time-text">25</div>
+					<div class="col-xs-4 plus text-left"><button class="plus-minus-button" id = "session-plus">+</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 clock">
+			<div class="circle">
+			<span class="status">sesstion</span>
+			<span class="time-show">25:00</span>
+			</div>
+		</div>
+		<div class = "col-xs-12 control">
+				<div class="row">
+					<div class="col-xs-2 col-xs-offset-4"><button class="btn btn-primary start-stop" id = "start">Start</button></div>
+					<div class="col-xs-2"><button class="btn btn-primary start-stop" id = "reset">Reset</button></div>
+				</div>
+		</div>
+</div>
+
+</body>
+</html>
