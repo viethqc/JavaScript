@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" ></script>
+
+	<script src="bootstrap-3.3.7-dist/js/jquery-3.1.1.min.js"></script>
+
+	<!-- <link rel="stylesheet" href="https://github.com/FortAwesome/Font-Awesome/tree/master/css/font-awesome.min.css" /> -->
+
+	<script type="text/javascript">
+		
+	</script>
+	<!-- <script src="https://use.fontawesome.com/97ef8f9f0e.js"></script> -->
+	<style type="text/css">
+
+		body
+		{
+			background-color: #092b40;
+			color :white;
+		}
+
+		.calculator
+		{
+			border: 1px solid white;
+			height: 400px;
+			width: 300px;
+			margin-top: 100px;
+			border-radius: 5px;
+		}
+
+		.title
+		{
+			height: 50px;
+		}
+
+		.view
+		{
+			border: 1px solid white;
+			height: 70px;
+			border-radius: 5px;
+		}
+
+		.row1, .row2, .row3
+		{
+			height: 40px;
+			padding: 0;
+			margin-top: 10px;
+		}
+
+		.button-first, .button-last, .button-center
+		{
+			height: 40px;
+			width: 50px;
+			background-color: #3a3a3a;
+			border-radius: 5px;
+		}
+
+		.div-button
+		{
+			padding: 0;
+		}
+
+		.div-button-center
+		{
+			padding-left: 5px;
+		}
+
+		#AC, #CE
+		{
+			background-color: #a72d45;
+		}
+
+		button
+		{
+			font-weight: bold;
+			font-size: 18px;
+		}
+
+		.row4
+		{
+			height: 93px;
+			margin-top: 10px;
+			padding: 0;
+		}
+
+		.row4-left, .row4-right
+		{
+			height: 100%;
+		}
+
+		#equal-btn
+		{
+			height: 100%;
+			width: 50px;
+			background-color: #3a3a3a;
+			border-radius: 5px;
+		}
+
+		.row4-left
+		{
+			padding: 0;
+		}
+
+		.above, .bellow
+		{
+			height: 40px;
+			padding: 0;
+		}
+
+		.above
+		{
+			margin-bottom: 10px;
+		}
+
+		.zero
+		{
+			padding: 0;
+		}
+
+		#zero
+		{
+			width: 117px;
+		}
+
+		.dot
+		{
+			padding: 0;
+			padding-left: 5px;
+		}
+
+		.big
+		{
+			height: 40px;
+			padding: 0px;
+			padding-right: 10px;
+			padding-left: 10px;
+			font-size: 30px;
+		}
+
+		.small
+		{
+			font-size: 16px;
+			padding: 0;
+			padding-right: 10px;
+			padding-top: 5px;
+		}
+	
+	</style>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			var strBig 		= "0";
+			var strSmall 	= "0";
+			var isReset		= false;
+
+			$("#one").click({button: $("#one")}, calcutator);
+			$("#two").click({button: $("#two")}, calcutator);
+			$("#three").click({button: $("#three")}, calcutator);
+			$("#four").click({button: $("#four")}, calcutator);
+			$("#five").click({button: $("#five")}, calcutator);
+			$("#six").click({button: $("#six")}, calcutator);
+			$("#seven").click({button: $("#seven")}, calcutator);
+			$("#eight").click({button: $("#eight")}, calcutator);
+			$("#nine").click({button: $("#nine")}, calcutator);
+			$("#zero").click({button: $("#zero")}, calcutator);
+			$("#minus").click({button: $("#minus")}, calcutator);
+			$("#plus").click({button: $("#plus")}, calcutator);
+			$("#divide").click({button: $("#divide")}, calcutator);
+			$("#multi").click({button: $("#multi")}, calcutator);
+			$("#dot").click({button: $("#dot")}, calcutator);
+			$("#equal-btn").click({button: $("#equal-btn")}, calcutator);
+			$("#AC").click({button: $("#AC")}, calcutator);
+			$("#CE").click({button: $("#CE")}, calcutator);
+
+			function calcutator(event)
+			{
+				var objButton = event.data.button;
+				var strText = objButton.text();
+				var iNumber;
+				var reg = /[+|\-|x|\/]/;
+
+				if (isReset === true)
+				{
+					strBig = "0";
+					strSmall = "0";
+					isReset = false;
+				}
+
+				switch (strText)
+				{
+					case "0":
+					case "1":
+					case "2":
+					case "3":
+					case "4":
+					case "5":
+					case "6":
+					case "7":
+					case "8":
+					case "9":
+						if (isOperator(strText) === true || isOperator(strBig) === true)
+						{
+							strBig = strText;
+						}
+						else
+						{
+							strBig += strText;
+						}
+
+						if (strSmall.match(reg) === null)
+						{
+							strSmall = strBig;
+						}
+						else
+						{
+							strSmall += strText;
+						}
+
+						break;
+					case "AC":
+						strBig = "0";
+						strSmall = "0";
+						break;
+					case "CE":
+						strBig = "0";
+
+						for (var i = strSmall.length - 1; i >= 0; i--)
+						{
+							if (isOperator(strSmall[i]) === true)
+							{
+								strSmall = strSmall.substring(0, i + 1);
+								break;
+							}
+						}
+
+						break;
+					case "/":
+						if (isOperator(strSmall[strSmall.length - 1]) === false && strSmall[strSmall.length - 1] !== ".")
+						{
+							strSmall += "/";
+							strBig = "/";
+						}
+						break;
+					case "x":
+						if (isOperator(strSmall[strSmall.length - 1]) === false && strSmall[strSmall.length - 1] !== ".")
+						{
+							strSmall += "x";
+							strBig = "x";
+						}
+						break;
+					case "-":
+						if (isOperator(strSmall[strSmall.length - 1]) === false && strSmall[strSmall.length - 1] !== ".")
+						{
+							strSmall += "-";
+							strBig = "-";
+						}
+						break;
+					case "+":
+						if (isOperator(strSmall[strSmall.length - 1]) === false && strSmall[strSmall.length - 1] !== ".")
+						{
+							strSmall += "+";
+							strBig = "+";
+						}
+						break;
+					case ".":
+						if (isOperator(strBig) === true)
+						{
+							break;
+						}
+
+						if (strBig.indexOf(".") === -1)
+						{
+							strBig += ".";
+							strSmall += ".";
+						}
+						break;
+					case "=":
+						if (isOperator(strSmall[strSmall.length - 1]) === false && strSmall[strSmall.length - 1] !== ".")
+						{
+							var regex = /[+|\-|x|\/]/g;
+							var arrNumber = strSmall.split(reg);
+							var arrOperator = strSmall.match(regex);
+							var infix = [];
+							var result;
+
+							for (var i = 0; i < arrNumber.length; i++)
+							{
+								infix.push(arrNumber[i]);
+
+								if (i < arrOperator.length)
+									infix.push(arrOperator[i]);
+							}
+
+							strPosfix = InfixToPosfix(infix);
+
+							result = equal(strPosfix);
+							strBig = "";
+							strBig += result;
+
+							if (isFloat(result) === true)
+							{
+								strBig = strBig.substring(0, 14);
+							}
+
+							isReset = true;
+						}
+						break;
+				}
+
+				if (strBig.length > 14 || strSmall.length > 26)
+				{
+					strBig = "0";
+					strSmall = "Digit Limit Met";
+				}
+				else
+				{
+					if (isReset == false)
+					{
+						strSmall = standardized(strSmall);
+						strBig = standardized(strBig);
+					}
+				}
+
+				$(".big").text(strBig);
+				$(".small").text(strSmall);
+			}
+
+			function isOperator(strText)
+			{
+				var reg = /[+|\-|x|\/|*]/;
+				if (strText.length != 1)
+				{
+					return false;
+				}
+
+				if (strText.match(reg) !== null)
+				{
+					return true;
+				}
+
+				return false;
+			}
+
+			function standardized(strText)
+			{
+				var arrToken = [];
+				var reg = /[+|\-|x|\/]/g;
+				var arrNumber = [];
+				var count = -1;
+				var strResult = "";
+				var iLength = -1;
+
+				if (isOperator(strText) === true)
+				{
+					return strText;
+				}
+
+				arrNumber = strText.split(reg);
+				arrToken = strText.match(reg);
+
+				if (arrToken === null || arrNumber === null)
+				{
+					if (strText[strText.length - 1] === ".")
+					{
+						strResult = strText;
+					}
+					else
+					{
+						strResult += Number(strText);
+					}
+					return strResult;
+				}
+
+				count = arrNumber.length - arrToken.length;
+				if (count > 1 || count < 0)
+				{
+					return strText;
+				}
+
+				//chuan hoa ve so, bo ky tu 0 o dau
+				//voi so thuc neu co dau . thi giu nguyen
+				for (var i = 0; i < arrNumber.length; i++)
+				{
+					if (arrNumber[i][arrNumber[i].length - 1] !== ".")
+					{
+						arrNumber[i] = Number(arrNumber[i]);
+					}
+				}
+
+				if (isOperator(strText[strText.length - 1]) === true)
+				{
+					iLength = arrNumber.length - 1;
+				}
+				else
+				{
+					iLength = arrNumber.length;
+				}
+
+				for (var i = 0; i < iLength; i++)
+				{
+					strResult += arrNumber[i];
+
+					if (i < arrToken.length)
+						strResult += arrToken[i];
+				}
+
+				return strResult;
+			}
+
+			function Precedence(x)
+			{
+				if (x == '+' || x == '-')
+					return 1 ;
+
+				if (x == '*' || x == '/' || x == "x")
+					return 2;
+			 
+				return 3;
+			}
+
+			function InfixToPosfix(strText)
+			{
+				var operand = [];
+				var strPosfix = [];
+				var tmp;
+
+				for (var i = 0; i < strText.length; i++)
+				{
+					if (isOperator(strText[i]) === true)		//Neu là toán tử
+					{
+						if (operand.length === 0)
+						{
+							operand.push(strText[i]);
+						}
+						else
+						{
+							tmp = operand.pop();
+							if (Precedence(tmp) >= Precedence(strText[i]))
+							{
+								strPosfix.push(tmp);
+							}
+							else
+							{
+								operand.push(tmp);
+							}
+							operand.push(strText[i]);
+						}
+					}
+					else
+					{
+						//nếu là toán hạng thì đẩy ra output
+						strPosfix.push(strText[i]);
+					}
+				}
+
+				while (operand.length > 0)
+				{
+					tmp = operand.pop();
+					strPosfix.push(tmp);
+				}
+
+				return strPosfix;
+			}
+
+			function equal(strText)
+			{
+				var equal = 0;
+				var number1;
+				var number2;
+				var stack = [];
+
+				for (var i = 0; i < strText.length; i++)
+				{
+					if (isNaN(strText[i]) === false)
+					{
+						stack.push(Number(strText[i]));
+					}
+					else
+					{
+						if (stack.length < 2)
+						{
+							return null;
+						}
+
+						number2 = stack.pop();
+						number1 = stack.pop();
+						stack.push(cal(number1, number2, strText[i]));
+					}
+				}
+
+				return stack.pop();
+			}
+
+			function cal(number1, number2, operator)
+			{
+				switch (operator)
+				{
+					case "+":
+						return number2 + number1;
+					case "-":
+						return number1 - number2;
+					case "*":
+					case "x":
+						return number2 * number1;
+					case "/":
+						return number1 / number2;
+				}
+			}
+
+			function isFloat(n)
+			{
+			    return Number(n) === n && n % 1 !== 0;
+			}
+		});
+	</script>
+</head>
+<body>
+
+<div class="container">
+	<div class="col-xs-3 col-xs-offset-4 calculator">
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1 title text-center">Calculator<br> written by VietHQc</div>
+			<div class="col-xs-10 col-xs-offset-1 view">
+				<div class="row">
+					<div class="col-xs-12 text-right big">
+						0
+					</div>
+					<div class="col-xs-12 text-right small">
+						0
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-1 row1">
+				<div class="col-xs-3 div-button text-left"><button class = "button-first" id = "AC">AC</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "CE">CE</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "divide">/</button></div>
+				<div class="col-xs-3 div-button text-right"><button class = "button-last" id = "multi">x</button></div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-1 row2">
+				<div class="col-xs-3 div-button text-left"><button class = "button-first" id = "seven">7</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "eight">8</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "nine">9</button></div>
+				<div class="col-xs-3 div-button text-right"><button class = "button-last" id = "minus">-</button></div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-1 row3">
+				<div class="col-xs-3 div-button text-left"><button class = "button-first" id = "four">4</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "five">5</button></div>
+				<div class="col-xs-3 div-button div-button-center"><button class = "button-center" id = "six">6</button></div>
+				<div class="col-xs-3 div-button text-right"><button class = "button-last" id = "plus">+</button></div>
+			</div>
+			<div class="col-xs-10 col-xs-offset-1 row4">
+				<div class = "col-xs-9 row4-left">
+					<div class="col-xs-12 above">
+						<div class="col-xs-4 div-button"><button class = "button-first" id = "one">1</button></div>
+						<div class="col-xs-4 div-button div-button-center"><button class = "button-center" id = "two">2</button></div>
+						<div class="col-xs-4 div-button div-button-center"><button class = "button-center" id = "three">3</button></div>
+					</div>
+					<div class="col-xs-12 bellow">
+						<div class="col-xs-8 zero"><button class = "button-center" id = "zero">0</button></div>
+						<div class="col-xs-4 dot"><button class = "button-center" id = "dot">.</button></div>
+					</div>
+				</div>
+				<div class = "col-xs-3 row4-right text-right"><button id = "equal-btn">=</button></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
