@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js" ></script>
+
+	<script src="bootstrap-3.3.7-dist/js/jquery-3.1.1.min.js"></script>
+
+	<!-- <link rel="stylesheet" href="https://github.com/FortAwesome/Font-Awesome/tree/master/css/font-awesome.min.css" /> -->
+
+	<!-- <script src="https://use.fontawesome.com/97ef8f9f0e.js"></script> -->
+	<style type="text/css">
+		body
+		{
+			background-color: #092b40;
+			color :white;
+		}
+
+		*
+		{
+			margin: 0;
+			padding: 0;
+		}
+
+		.wrapper
+		{
+			background-color : orange;
+			width: 400px;
+			height: 420px;
+			margin: 100px auto;
+			border-radius: 10px;
+			padding: 40px 30px;
+			position: relative;
+		}
+
+		.inner-type, .inner-xo
+		{
+			width: 340px;
+			height: 340px;
+			position: absolute;
+			background-color: #092b40;
+		}
+
+		.inner-type .container span
+		{
+			display: block;
+			width: 100%;
+			margin-bottom: 50px;
+			margin-top: 80px;
+		}
+
+		.two-player
+		{
+			margin-left: 30px;
+		}
+
+		.one-player
+		{
+			margin-left: 20px;
+		}
+
+		.one-player, .two-player, .back
+		{
+			border-radius: 15px;
+			width: 120px;
+			border: none;
+		}
+
+		.container
+		{
+			width: 100%;
+		}
+
+		.xo
+		{
+			background-color: #092b40;
+			border: none;	
+			height: 50px;
+			width: 30px;
+			margin-left: 5px;
+			margin-right: 5px;
+			font-size:25px;
+			border-radius: 10px;
+		}
+
+		.xo:hover
+		{
+			border: 1px dashed white;
+		}
+
+		.inner-xo .col-xs-12
+		{
+			margin-top: 30px;
+		}
+	</style>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			$(".inner-type").fadeIn(1000);
+			$(".inner-xo").hide();
+
+			$(".one-player").click(function(){
+				$(".inner-type").fadeOut(1000);
+				$(".inner-xo").fadeIn(1000);
+			});
+		});
+	</script>
+</head>
+<body>
+
+<div class = "wrapper">
+	<div class="inner-type">
+		<div class="container">
+
+			<span class="text-center"><h1>Tic Tac Toe</h1></span>
+			<button class = "btn btn-info one-player">One Player</button>
+			<button class = "btn btn-info two-player">Two Player</button>
+		</div>
+	</div>
+
+	<dir class="inner-xo">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 text-center"><h2>Would you like to be X or O?</h2></div>
+				<div class="col-xs-12 text-center">
+					<button class="xo">X</button>
+					<button class="xo">O</button>
+				</div>
+				<div class="col-xs-12 text-center">
+					<button class = "btn btn-info back">Back</button>
+				</div>
+			</div>
+		</div>
+	</dir>
+
+</div>
+
+</body>
+</html>
